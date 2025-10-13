@@ -1,6 +1,6 @@
 {
-  "name": "kenya-locations-data",
-  "version": "1.0.7",
+  "name": "ke-locations-data",
+  "version": "0.0.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
