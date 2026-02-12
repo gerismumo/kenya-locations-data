@@ -10,4 +10,4 @@ export type {
   SearchType,
 } from "./types";
 
-export { searchLocations } from "./services";
+export { KenyaLocations, kenyaLocations } from "./services/search";

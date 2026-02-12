@@ -1,27 +1,36 @@
 import { describe, it, expect } from "vitest";
-import { searchLocations } from "../services";
+import { KenyaLocations } from "../services";
 
 describe("searchLocations", () => {
   it("should return results for valid query", () => {
-    const results = searchLocations("Mombasa");
+    const kenya = new KenyaLocations();
+
+    const results = kenya.search("Mombasa");
+
+    console.log("result", results);
 
     expect(results.length).toBeGreaterThan(0);
   });
 
   it("should filter by type", () => {
-    const results = searchLocations("Mombasa", "county");
+    const kenya = new KenyaLocations();
+
+    const results = kenya.search("Mombasa", "county");
 
     expect(results.every((r) => r.type === "county")).toBe(true);
   });
 
   it("should respect limit", () => {
-    const results = searchLocations("a", 3);
+    const kenya = new KenyaLocations();
+
+    const results = kenya.search("a", 3);
 
     expect(results.length).toBeLessThanOrEqual(3);
   });
 
   it("should return empty array for empty query", () => {
-    const results = searchLocations("");
+    const kenya = new KenyaLocations();
+    const results = kenya.search("");
 
     expect(results).toEqual([]);
   });
