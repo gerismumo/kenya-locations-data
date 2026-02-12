@@ -1,4 +1,3 @@
-import Fuse from "fuse.js";
 import {
   SearchResult,
   SearchType,
@@ -48,50 +47,10 @@ class LookupService<T extends { code: string; name: string }> {
 
 //  Search service using Fuse.js
 class SearchService {
-  private readonly globalFuse: Fuse<SearchResult>;
-  private readonly fuseByType: Record<SearchType, Fuse<SearchResult>>;
   private readonly combinedData: SearchResult[];
-
-  private static readonly FUSE_OPTIONS = {
-    keys: ["item.name", "item.code"],
-    includeScore: true,
-    threshold: 0.2,
-    ignoreLocation: true,
-    minMatchCharLength: 2,
-  };
 
   constructor(combinedData: SearchResult[]) {
     this.combinedData = combinedData;
-    this.globalFuse = new Fuse(combinedData, SearchService.FUSE_OPTIONS);
-    this.fuseByType = this.initializeFuseByType();
-  }
-
-  private initializeFuseByType(): Record<SearchType, Fuse<SearchResult>> {
-    const types: SearchType[] = [
-      "county",
-      "constituency",
-      "ward",
-      "locality",
-      "area",
-    ];
-
-    return types.reduce(
-      (acc, type) => {
-        acc[type] = new Fuse(
-          this.combinedData.filter((d) => d.type === type),
-          SearchService.FUSE_OPTIONS,
-        );
-        return acc;
-      },
-      {} as Record<SearchType, Fuse<SearchResult>>,
-    );
-  }
-
-  public search(query: string, type?: SearchType, limit = 10): SearchResult[] {
-    if (!query.trim()) return [];
-
-    const fuseInstance = type ? this.fuseByType[type] : this.globalFuse;
-    return fuseInstance.search(query, { limit }).map((r) => r.item);
   }
 
   public getByType(type: SearchType): SearchResult[] {
@@ -121,7 +80,6 @@ class DataAggregator {
 }
 
 // Main service for accessing Kenya location data
-
 export class KenyaLocations {
   private readonly countyService: LookupService<ICounty>;
   private readonly constituencyService: LookupService<IConstituency>;
@@ -163,8 +121,50 @@ export class KenyaLocations {
     } else if (typeof typeOrLimit === "string") {
       type = typeOrLimit;
     }
+    const normalizedQuery = query.toLowerCase();
 
-    return this.searchService.search(query, type, limit);
+    const exactMatch = this.getExactMatch(normalizedQuery, type);
+    return exactMatch.slice(0, limit);
+  }
+
+  private getExactMatch(query: string, type?: SearchType): SearchResult[] {
+    const results: SearchResult[] = [];
+
+    const pushIfFound = (
+      item: IArea | ICounty | IConstituency | IWard | ILocality | undefined,
+      itemType: SearchType,
+    ) => {
+      if (item) {
+        results.push({ type: itemType, item });
+      }
+    };
+
+    if (!type || type === "county") {
+      pushIfFound(this.countyService.getByCode(query), "county");
+      pushIfFound(this.countyService.getByName(query), "county");
+    }
+
+    if (!type || type === "constituency") {
+      pushIfFound(this.constituencyService.getByCode(query), "constituency");
+      pushIfFound(this.constituencyService.getByName(query), "constituency");
+    }
+
+    if (!type || type === "ward") {
+      pushIfFound(this.wardService.getByCode(query), "ward");
+      pushIfFound(this.wardService.getByName(query), "ward");
+    }
+
+    if (!type || type === "locality") {
+      pushIfFound(this.localityService.getByCode(query), "locality");
+      pushIfFound(this.localityService.getByName(query), "locality");
+    }
+
+    if (!type || type === "area") {
+      pushIfFound(this.areaService.getByCode(query), "area");
+      pushIfFound(this.areaService.getByName(query), "area");
+    }
+
+    return results;
   }
 
   public getByType(type: SearchType): SearchResult[] {

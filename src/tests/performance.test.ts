@@ -18,7 +18,7 @@ describe("KenyaLocations - Performance Tests", () => {
     const endTime = performance.now();
     const duration = endTime - startTime;
 
-    console.log("duration: " + duration)
+    // console.log("duration: " + duration)
 
     // Should complete 100 searches in less than 1 second
     expect(duration).toBeLessThan(1000);

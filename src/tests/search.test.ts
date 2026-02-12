@@ -50,7 +50,7 @@ describe("KenyaLocations - Search Methods", () => {
     });
 
     it("should search by code", () => {
-      const results = kenya.search("001");
+      const results = kenya.search("1");
       expect(results.length).toBeGreaterThan(0);
     });
 
