@@ -10,14 +10,14 @@ describe("KenyaLocations - County Methods", () => {
 
   describe("getCountyByCode", () => {
     it("should return county for valid code", () => {
-      const county = kenya.getCountyByCode("001");
+      const county = kenya.getCountyByCode("1");
       expect(county).toBeDefined();
-      expect(county?.code).toBe("001");
+      expect(county?.code).toBe("1");
     });
 
     it("should be case insensitive", () => {
-      const county1 = kenya.getCountyByCode("001");
-      const county2 = kenya.getCountyByCode("001");
+      const county1 = kenya.getCountyByCode("1");
+      const county2 = kenya.getCountyByCode("1");
       expect(county1).toEqual(county2);
     });
 

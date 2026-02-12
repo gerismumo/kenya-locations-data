@@ -10,14 +10,14 @@ describe("KenyaLocations - Locality Methods", () => {
 
   describe("getLocalityByCode", () => {
     it("should return locality for valid code", () => {
-      const locality = kenya.getLocalityByCode("001");
+      const locality = kenya.getLocalityByCode("2544");
       expect(locality).toBeDefined();
-      expect(locality?.code).toBe("001");
+      expect(locality?.code).toBe("2544");
     });
 
     it("should be case insensitive", () => {
-      const locality1 = kenya.getLocalityByCode("001");
-      const locality2 = kenya.getLocalityByCode("001");
+      const locality1 = kenya.getLocalityByCode("2544");
+      const locality2 = kenya.getLocalityByCode("2544");
       expect(locality1).toEqual(locality2);
     });
 
@@ -72,14 +72,14 @@ describe("KenyaLocations - Locality Methods", () => {
 
   describe("getLocalitiesByCounty", () => {
     it("should return localities for valid county code", () => {
-      const localities = kenya.getLocalitiesByCounty("047"); // Nairobi
+      const localities = kenya.getLocalitiesByCounty("47"); // Nairobi
       expect(localities.length).toBeGreaterThan(0);
-      expect(localities.every((l) => l.county_code === "047")).toBe(true);
+      expect(localities.every((l) => l.county_code === "47")).toBe(true);
     });
 
     it("should be case insensitive", () => {
-      const localities1 = kenya.getLocalitiesByCounty("047");
-      const localities2 = kenya.getLocalitiesByCounty("047");
+      const localities1 = kenya.getLocalitiesByCounty("47");
+      const localities2 = kenya.getLocalitiesByCounty("47");
       expect(localities1).toEqual(localities2);
     });
 

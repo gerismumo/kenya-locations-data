@@ -18,6 +18,8 @@ describe("KenyaLocations - Performance Tests", () => {
     const endTime = performance.now();
     const duration = endTime - startTime;
 
+    console.log("duration: " + duration)
+
     // Should complete 100 searches in less than 1 second
     expect(duration).toBeLessThan(1000);
   });
@@ -26,7 +28,7 @@ describe("KenyaLocations - Performance Tests", () => {
     const startTime = performance.now();
 
     for (let i = 0; i < 1000; i++) {
-      kenya.getCountyByCode("047");
+      kenya.getCountyByCode("47");
       kenya.getCountyByName("Nairobi");
     }
 
@@ -41,7 +43,7 @@ describe("KenyaLocations - Performance Tests", () => {
     const startTime = performance.now();
 
     for (let i = 0; i < 50; i++) {
-      const county = kenya.getCountyByCode("047");
+      const county = kenya.getCountyByCode("47");
       if (county) {
         kenya.getConstituenciesByCounty(county.code);
         kenya.getWardsByCounty(county.code);
@@ -76,8 +78,8 @@ describe("KenyaLocations - Performance Tests", () => {
 
     for (let i = 0; i < 100; i++) {
       kenya.search("a", 5);
-      kenya.getCountyByCode("047");
-      kenya.getConstituenciesByCounty("047");
+      kenya.getCountyByCode("47");
+      kenya.getConstituenciesByCounty("47");
       kenya.getWardByName("Parklands/Highridge");
       kenya.getAreasByLocality("Karen");
     }

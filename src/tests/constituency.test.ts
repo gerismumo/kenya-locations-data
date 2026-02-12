@@ -10,14 +10,14 @@ describe("KenyaLocations - Constituency Methods", () => {
 
   describe("getConstituencyByCode", () => {
     it("should return constituency for valid code", () => {
-      const constituency = kenya.getConstituencyByCode("001");
+      const constituency = kenya.getConstituencyByCode("159");
       expect(constituency).toBeDefined();
-      expect(constituency?.code).toBe("001");
+      expect(constituency?.code).toBe("159");
     });
 
     it("should be case insensitive", () => {
-      const constituency1 = kenya.getConstituencyByCode("001");
-      const constituency2 = kenya.getConstituencyByCode("001");
+      const constituency1 = kenya.getConstituencyByCode("159");
+      const constituency2 = kenya.getConstituencyByCode("159");
       expect(constituency1).toEqual(constituency2);
     });
 
@@ -72,14 +72,14 @@ describe("KenyaLocations - Constituency Methods", () => {
 
   describe("getConstituenciesByCounty", () => {
     it("should return constituencies for valid county code", () => {
-      const constituencies = kenya.getConstituenciesByCounty("047"); // Nairobi
+      const constituencies = kenya.getConstituenciesByCounty("47"); // Nairobi
       expect(constituencies.length).toBeGreaterThan(0);
-      expect(constituencies.every((c) => c.county_code === "047")).toBe(true);
+      expect(constituencies.every((c) => c.county_code === "47")).toBe(true);
     });
 
     it("should be case insensitive", () => {
-      const constituencies1 = kenya.getConstituenciesByCounty("047");
-      const constituencies2 = kenya.getConstituenciesByCounty("047");
+      const constituencies1 = kenya.getConstituenciesByCounty("47");
+      const constituencies2 = kenya.getConstituenciesByCounty("47");
       expect(constituencies1).toEqual(constituencies2);
     });
 

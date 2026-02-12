@@ -10,14 +10,14 @@ describe("KenyaLocations - Ward Methods", () => {
 
   describe("getWardByCode", () => {
     it("should return ward for valid code", () => {
-      const ward = kenya.getWardByCode("001");
+      const ward = kenya.getWardByCode("0719");
       expect(ward).toBeDefined();
-      expect(ward?.code).toBe("001");
+      expect(ward?.code).toBe("0719");
     });
 
     it("should be case insensitive", () => {
-      const ward1 = kenya.getWardByCode("001");
-      const ward2 = kenya.getWardByCode("001");
+      const ward1 = kenya.getWardByCode("0719");
+      const ward2 = kenya.getWardByCode("0719");
       expect(ward1).toEqual(ward2);
     });
 
@@ -74,7 +74,7 @@ describe("KenyaLocations - Ward Methods", () => {
 
   describe("getWardsByConstituency", () => {
     it("should return wards for valid constituency code", () => {
-      const wards = kenya.getWardsByConstituency("290"); // Westlands
+      const wards = kenya.getWardsByConstituency("290");
       expect(wards.length).toBeGreaterThan(0);
       expect(wards.every((w) => w.constituency_code === "290")).toBe(true);
     });
@@ -93,14 +93,14 @@ describe("KenyaLocations - Ward Methods", () => {
 
   describe("getWardsByCounty", () => {
     it("should return wards for valid county code", () => {
-      const wards = kenya.getWardsByCounty("047"); // Nairobi
+      const wards = kenya.getWardsByCounty("47"); 
       expect(wards.length).toBeGreaterThan(0);
-      expect(wards.every((w) => w.county_code === "047")).toBe(true);
+      expect(wards.every((w) => w.county_code === "47")).toBe(true);
     });
 
     it("should be case insensitive", () => {
-      const wards1 = kenya.getWardsByCounty("047");
-      const wards2 = kenya.getWardsByCounty("047");
+      const wards1 = kenya.getWardsByCounty("47");
+      const wards2 = kenya.getWardsByCounty("47");
       expect(wards1).toEqual(wards2);
     });
 

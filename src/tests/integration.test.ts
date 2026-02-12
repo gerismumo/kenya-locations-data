@@ -40,7 +40,7 @@ describe("KenyaLocations - Integration Tests", () => {
 
   it("should handle complete location hierarchy", () => {
     // County -> Constituency -> Ward flow
-    const county = kenya.getCountyByCode("047"); // Nairobi
+    const county = kenya.getCountyByCode("47"); // Nairobi
     expect(county).toBeDefined();
 
     if (county) {
