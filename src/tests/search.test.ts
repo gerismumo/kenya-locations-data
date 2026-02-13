@@ -10,7 +10,7 @@ describe("KenyaLocations - Search Methods", () => {
 
   describe("search", () => {
     it("should return results for valid query", () => {
-      const results = kenya.search("Mombasa");
+      const results = kenya.search("kis");
       expect(results.length).toBeGreaterThan(0);
     });
 

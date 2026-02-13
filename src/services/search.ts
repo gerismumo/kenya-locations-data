@@ -12,19 +12,33 @@ import { areas, constituencies, counties, localities, wards } from "../data";
 class LookupService<T extends { code: string; name: string }> {
   private readonly byCode: Map<string, T>;
   private readonly byName: Map<string, T>;
+  private readonly byPrefix: Map<string, T[]>;
   private readonly data: T[];
 
   constructor(data: T[]) {
     this.data = data;
     this.byCode = new Map();
     this.byName = new Map();
+    this.byPrefix = new Map();
     this.initializeMaps();
   }
 
   private initializeMaps(): void {
     this.data.forEach((item) => {
+      const lowerName = item.name.toLowerCase();
+
       this.byCode.set(item.code.toLowerCase(), item);
-      this.byName.set(item.name.toLowerCase(), item);
+      this.byName.set(lowerName, item);
+
+      for (let i = 1; i <= lowerName.length; i++) {
+        const prefix = lowerName.substring(0, i);
+
+        if (!this.byPrefix.has(prefix)) {
+          this.byPrefix.set(prefix, []);
+        }
+
+        this.byPrefix.get(prefix)!.push(item);
+      }
     });
   }
 
@@ -34,6 +48,13 @@ class LookupService<T extends { code: string; name: string }> {
 
   public getByName(name: string): T | undefined {
     return this.byName.get(name.toLowerCase());
+  }
+
+  public getByNameMany(name: string): T[] {
+    const normalized = name.toLowerCase().trim();
+    if (!normalized) return [];
+
+    return this.byPrefix.get(normalized) ?? [];
   }
 
   public getAll(): T[] {
@@ -139,29 +160,41 @@ export class KenyaLocations {
       }
     };
 
+    const pushManyIfFound = (
+      items: (IArea | ICounty | IConstituency | IWard | ILocality)[],
+      itemType: SearchType,
+    ) => {
+      items.forEach((item) => {
+        results.push({ type: itemType, item });
+      });
+    };
+
     if (!type || type === "county") {
       pushIfFound(this.countyService.getByCode(query), "county");
-      pushIfFound(this.countyService.getByName(query), "county");
+      pushManyIfFound(this.countyService.getByNameMany(query), "county");
     }
 
     if (!type || type === "constituency") {
       pushIfFound(this.constituencyService.getByCode(query), "constituency");
-      pushIfFound(this.constituencyService.getByName(query), "constituency");
+      pushManyIfFound(
+        this.constituencyService.getByNameMany(query),
+        "constituency",
+      );
     }
 
     if (!type || type === "ward") {
       pushIfFound(this.wardService.getByCode(query), "ward");
-      pushIfFound(this.wardService.getByName(query), "ward");
+      pushManyIfFound(this.wardService.getByNameMany(query), "ward");
     }
 
     if (!type || type === "locality") {
       pushIfFound(this.localityService.getByCode(query), "locality");
-      pushIfFound(this.localityService.getByName(query), "locality");
+      pushManyIfFound(this.localityService.getByNameMany(query), "locality");
     }
 
     if (!type || type === "area") {
       pushIfFound(this.areaService.getByCode(query), "area");
-      pushIfFound(this.areaService.getByName(query), "area");
+      pushManyIfFound(this.areaService.getByNameMany(query), "area");
     }
 
     return results;
